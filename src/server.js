@@ -9,7 +9,9 @@ dotenv.config();
 const app = express();
 
 const PORT = process.env.EXPRESS_PORT || 3000;
-const FRONTEND = process.env.FRONTEND;
+const FRONTEND = process.env.FRONTEND.split(", ");
+
+console.log(FRONTEND);
 
 let corsOptions = {
 	origin: FRONTEND
