@@ -35,7 +35,7 @@ const reservationReminderEmail = asyncHandler(async (req, res) => {
     };
 
     await sendMail(transporter, mailOptions, req.body.minutesDelay);
-    res.status(500).json({ ...resRemEmailInput, "message": "success" });
+    res.status(200).json({ ...req.body, "message": "success" });
 });
 
 module.exports = {
