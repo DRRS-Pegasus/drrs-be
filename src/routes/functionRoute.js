@@ -1,11 +1,11 @@
-const express = require("express");
+import { Router } from "express";
 
-const {
-    reservationReminderEmail
-} = require("../controllers/functionController");
+import { reservationReminderEmail, autoCancellation } from "../controllers/functionController.js";
 
-const router = express.Router();
+const router = Router();
 
 router.post("/email", reservationReminderEmail);
 
-module.exports = router;
+router.post("/autoCancel", autoCancellation);
+
+export { router };

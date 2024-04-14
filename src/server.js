@@ -1,10 +1,10 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
+import express, { json } from "express";
+import { config } from "dotenv";
+import cors from "cors";
 
-const functionRoute = require("./routes/functionRoute");
+import { router } from "./routes/functionRoute.js";
 
-dotenv.config();
+config();
 
 const app = express();
 
@@ -18,9 +18,9 @@ let corsOptions = {
 }
 
 app.use(cors(corsOptions));
-app.use(express.json());
+app.use(json());
 
-app.use("/api/functions", functionRoute);
+app.use("/api/functions", router);
 
 app.get("/", (req, res) => {
 	res.send("Express Server ");
