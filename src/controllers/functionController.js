@@ -116,6 +116,7 @@ export const autoCancellation = asyncHandler(async (req, res) => {
         const resEvent = axi.data.fields;
         // console.log("RES EVENT TITLE");
         // console.log(resEvent.title.stringValue);
+        console.log(resEvent);
         const resEventId = resEvent.event_id.stringValue;
         const resEventTitle = resEvent.title.stringValue;
         if (resEventTitle === "Reserved") {
@@ -123,7 +124,7 @@ export const autoCancellation = asyncHandler(async (req, res) => {
             await axios.delete(url, { headers: { Authorization: token } });
             await sendMail(transporter, mailOptions);
         }
-    }, req.body.minutesDelay);
+    }, req.body.minutesDelay * 60000);
 
     return res.status(200).json({ "message": "success auto cancel scheduled" });
 });
