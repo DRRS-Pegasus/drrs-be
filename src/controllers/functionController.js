@@ -66,7 +66,6 @@ export const autoCancellation = asyncHandler(async (req, res) => {
     // console.log("BODY");
     // console.log(req.body);
 
-    /*
     const transporter = nodeMailer.createTransport({
         service: "gmail",
         host: 'smtp.gmail.com',
@@ -128,5 +127,4 @@ export const autoCancellation = asyncHandler(async (req, res) => {
     }, req.body.minutesDelay * 60000);
 
     return res.status(200).json({ "message": "success auto cancel scheduled" });
-    */
 });
