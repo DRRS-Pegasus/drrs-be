@@ -95,36 +95,41 @@ export const autoCancellation = asyncHandler(async (req, res) => {
 
     const url = `https://firestore.googleapis.com/v1/projects/drr-system/databases/(default)/documents/reservation-event/${req.body.eventId}`;
     const token = req.headers.authorization;
-    
-    try {
-        // test for errors if res event is present in firestore
-        // console.log("CHECK URL");
-        // console.log(url);
-        // console.log("CHECK TOKEN");
-        // console.log(token);
-        await axios.get(url, { headers: { Authorization: token } });
-    } catch (error) {
-        console.error("ERROR IN RETRIEVING EVENT FROM FIRESTORE");
-        console.error("Event may have already be deleated or you lack authorization");
-        return res.status(200).json({ "message": "auto cancel scheduled has been stopped" });
-    }
+
+    // test for errors if res event is present in firestore
+    // console.log("CHECK URL");
+    // console.log(url);
+    // console.log("CHECK TOKEN");
+    // console.log(token);
+
+    // const axi = await axios.get(url, { headers: { Authorization: token } });
+    // console.log("AXII START");
+    // console.log(axi.data.fields);
+    // const resEvent = axi.data.fields;
+    // console.log("RES EVENT TITLE");
+    // console.log(resEvent.title.stringValue);
+    // console.log(resEvent);
+    // const resEventId = resEvent.event_id.stringValue;
 
     setTimeout(async () => {
-        const axi = await axios.get(url, { headers: { Authorization: token } });
-        // console.log("AXII START");
-        // console.log(axi.data.fields);
-        const resEvent = axi.data.fields;
-        // console.log("RES EVENT TITLE");
-        // console.log(resEvent.title.stringValue);
-        console.log(resEvent);
-        const resEventId = resEvent.event_id.stringValue;
-        const resEventTitle = resEvent.title.stringValue;
-        if (resEventTitle === "Reserved") {
-            console.log("Auto cancelled reservation");
-            await axios.delete(url, { headers: { Authorization: token } });
-            await sendMail(transporter, mailOptions);
+        try {
+            const axi = await axios.get(url, { headers: { Authorization: token } });
+            const resEvent = axi.data.fields;
+            const resEventTitle = resEvent.title.stringValue;
+
+            if (resEventTitle === "Reserved") {
+                console.log("Auto cancelled reservation");
+                await axios.delete(url, { headers: { Authorization: token } });
+                await sendMail(transporter, mailOptions);
+            }
+
+            return res.status(200).json({ "message": "success auto cancel scheduled" });
+
+        } catch (error) {
+            console.error("ERROR IN RETRIEVING EVENT FROM FIRESTORE");
+            console.error("Event may have already be deleated or you lack authorization");
+            return res.status(200).json({ "message": "auto cancel scheduled has been stopped" });
         }
     }, req.body.minutesDelay * 60000);
 
-    return res.status(200).json({ "message": "success auto cancel scheduled" });
 });
