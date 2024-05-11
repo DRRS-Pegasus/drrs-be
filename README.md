@@ -13,7 +13,7 @@ See sample below installation for more information
 
 ## Installation
 1. Set up `.env' file
-```
+``` .env
 PORT=3000
 
 EMAIL_USER=drrs.pegasus@gmail.com
